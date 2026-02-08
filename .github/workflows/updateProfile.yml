@@ -1,4 +1,4 @@
-name: Daily and Manual Test Suite
+name: NaukriProfileUpdate
 
 on:
   # Schedule disabled — uncomment the block below to enable daily runs.
@@ -32,6 +32,9 @@ jobs:
 
       - name: Run TestNG suite (updateProfile.xml)
         working-directory: ${{ github.workspace }}
+        env:
+          NAUKRI_USERNAME: ${{secrets.NAUKRI_USERNAME}}
+          NAUKRI_PASSWORD: ${{secrets.NAUKRI_PASSWORD}}
         run: |
           mvn test -B -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/updateProfile.xml
 
