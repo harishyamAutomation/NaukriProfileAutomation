@@ -23,23 +23,6 @@ jobs:
           java-version: '17'
           cache: maven
 
-      # ... local Maven cache handled by setup-java (cache: maven)
-
-      - name: Ensure config.properties exists (copy example if present)
-        if: always()
-        run: |
-          echo "Ensuring src/main/config.properties exists"
-          mkdir -p src/main
-          if [ -f src/main/config.properties ]; then
-            echo "src/main/config.properties already exists, leaving it"
-          elif [ -f src/main/resources/config.properties.example ]; then
-            echo "Copying example to src/main/config.properties"
-            cp src/main/resources/config.properties.example src/main/config.properties
-          else
-            echo "No config.properties or example found in repo; tests may fail if properties are required"
-          fi
-        shell: bash
-
       - name: Run TestNG suite (updateProfile.xml)
         working-directory: ${{ github.workspace }}
         env:
@@ -59,9 +42,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: surefire-reports-and-reports
+          name: Reports
           path: |
-            target/surefire-reports/**
-            target/test-classes/**
             reports/**
             Naukri_Profile.html

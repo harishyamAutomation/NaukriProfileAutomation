@@ -1,5 +1,6 @@
 package core;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,7 +18,7 @@ public class PropertyReader {
 			Properties properties = new Properties();
 
 			// 1) Try external file at project root (src/main/config.properties)
-			java.io.File external = new java.io.File("src/main/config.properties");
+			File external = new File("src/main/config.properties");
 			if (external.exists()) {
 				try (InputStream propertyFile = new FileInputStream(external)) {
 					properties.load(propertyFile);
