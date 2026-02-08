@@ -41,6 +41,7 @@ public class SpecBuilder {
 		headers.put("appid", "103");
 		headers.put("content-type", "application/json");
 		headers.put("systemid", "jobseeker");
+		headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36");
 		return headers;
 	}
 
