@@ -14,10 +14,30 @@ public class PropertyReader {
 		String propertyValue = null;
 
 		try {
-			InputStream propertyFile = new FileInputStream("src/main/config.properties");
 			Properties properties = new Properties();
-			properties.load(propertyFile);
-			propertyValue = properties.getProperty(key);
+
+			// 1) Try external file at project root (src/main/config.properties)
+			java.io.File external = new java.io.File("src/main/config.properties");
+			if (external.exists()) {
+				try (InputStream propertyFile = new FileInputStream(external)) {
+					properties.load(propertyFile);
+					propertyValue = properties.getProperty(key);
+				}
+			} else {
+				// 2) Try classpath resource 'config.properties' (e.g. src/main/resources/config.properties)
+				InputStream resourceStream = PropertyReader.class.getClassLoader().getResourceAsStream("config.properties");
+				if (resourceStream != null) {
+					properties.load(resourceStream);
+					propertyValue = properties.getProperty(key);
+				} else {
+					// 3) Fallback to example bundled with repo: 'config.properties.example' on classpath
+					InputStream exampleStream = PropertyReader.class.getClassLoader().getResourceAsStream("config.properties.example");
+					if (exampleStream != null) {
+						properties.load(exampleStream);
+						propertyValue = properties.getProperty(key);
+					}
+				}
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			System.out.println(e);
