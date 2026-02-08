@@ -30,8 +30,9 @@ jobs:
         env:
           NAUKRI_USERNAME: ${{secrets.NAUKRI_USERNAME}}
           NAUKRI_PASSWORD: ${{secrets.NAUKRI_PASSWORD}}
+          JAVA_TOOL_OPTIONS: -Djava.awt.headless=true
         run: |
-          mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/updateProfile.xml
+          mvn clean test -Djava.awt.headless=true -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/updateProfile.xml
 
       - name: List generated files (diagnostic)
         if: always()

@@ -43,16 +43,34 @@ public class ExtentReport {
 			e.printStackTrace();
 		}
 
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		DisplayMode mode = gd.getDisplayMode();
-		int screenWidth = mode.getWidth();
-		int screenHeight = mode.getHeight();
+		try {
+			String osInfo = System.getProperty("os.name");
+			String screenInfo = "(headless)";
 
-		extentReport.setSystemInfo("Product", "Naukri Profile WebAPI");
-		extentReport.setSystemInfo("Host", "Harishyam Sharma");
-		extentReport.setSystemInfo("Environment", "QA");
-		extentReport.setSystemInfo("OS", System.getProperty("os.name") + ", " + screenWidth + "x" + screenHeight);
-		extentReport.setSystemInfo("Java Version", System.getProperty("java.version"));
+			// If running in a graphical environment, try to get screen size. In headless CI
+			// environments (like GitHub Actions) this will be skipped to avoid HeadlessException.
+			if (!GraphicsEnvironment.isHeadless()) {
+				GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+				DisplayMode mode = gd.getDisplayMode();
+				int screenWidth = mode.getWidth();
+				int screenHeight = mode.getHeight();
+				screenInfo = screenWidth + "x" + screenHeight;
+			}
+
+			extentReport.setSystemInfo("Product", "Naukri Profile WebAPI");
+			extentReport.setSystemInfo("Host", "Harishyam Sharma");
+			extentReport.setSystemInfo("Environment", "QA");
+			extentReport.setSystemInfo("OS", osInfo + ", " + screenInfo);
+			extentReport.setSystemInfo("Java Version", System.getProperty("java.version"));
+		} catch (Throwable t) {
+			// Defensive: in case any unexpected error occurs while collecting system info
+			OutputLog.warn("Could not determine screen size or system info: " + t.getMessage());
+			extentReport.setSystemInfo("Product", "Naukri Profile WebAPI");
+			extentReport.setSystemInfo("Host", "Harishyam Sharma");
+			extentReport.setSystemInfo("Environment", "QA");
+			extentReport.setSystemInfo("OS", System.getProperty("os.name"));
+			extentReport.setSystemInfo("Java Version", System.getProperty("java.version"));
+		}
 
 		OutputLog.info("Initialization Successful");
 	}
