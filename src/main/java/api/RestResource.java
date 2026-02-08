@@ -5,15 +5,14 @@ import static io.restassured.RestAssured.given;
 import java.util.HashMap;
 import java.util.Map;
 
-import core.PropertyReader;
 import io.restassured.response.Response;
 
 public class RestResource {
 
 	public static Response postAccount() {
 		Map<String, String> requestBody = new HashMap<>();
-		requestBody.put("username", PropertyReader.getProperty("username"));
-		requestBody.put("password", "password");
+		requestBody.put("username", System.getenv("NAUKRI_USERNAME"));
+		requestBody.put("password", System.getenv("NAUKRI_PASSWORD"));
 		return given(SpecBuilder.getAccountRequestSpec())
 				.body(requestBody)
 				.when().post(Routes.LOGIN)
