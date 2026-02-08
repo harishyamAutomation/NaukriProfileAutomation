@@ -13,7 +13,7 @@ public class RestResource {
 	public static Response postAccount() {
 		Map<String, String> requestBody = new HashMap<>();
 		requestBody.put("username", PropertyReader.getProperty("username"));
-		requestBody.put("password", PropertyReader.getProperty("password"));
+		requestBody.put("password", "password");
 		return given(SpecBuilder.getAccountRequestSpec())
 				.body(requestBody)
 				.when().post(Routes.LOGIN)
