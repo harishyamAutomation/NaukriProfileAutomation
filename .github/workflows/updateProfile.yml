@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '15'
+          java-version: '17'
           cache: maven
 
       # ... local Maven cache handled by setup-java (cache: maven)
