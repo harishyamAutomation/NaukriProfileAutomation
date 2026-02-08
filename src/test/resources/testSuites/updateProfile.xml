@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="NaukriProfile : Profile">
+	<listeners>
+		<listener class-name="listeners.RetryListener"></listener>
+	</listeners>
+	<test name="NaukriProfile">
+		<classes>
+			<class name="naukri.testModules.NaukriProfileTest"></class>
+		</classes>
+	</test>
+</suite>

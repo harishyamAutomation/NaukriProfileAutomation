@@ -1,0 +1,46 @@
+name: Daily and Manual Test Suite
+
+on:
+  # Schedule disabled — uncomment the block below to enable daily runs.
+  # schedule:
+  #   # Runs once per day at 00:00 UTC
+  #   - cron: '0 0 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    name: Run TestNG suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Run TestNG suite (updateProfile.xml)
+        working-directory: ${{ github.workspace }}
+        run: |
+          mvn test -B -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/updateProfile.xml
+
+      - name: Upload Surefire reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: |
+            target/surefire-reports/**
+            target/test-classes/**
+            reports/**
