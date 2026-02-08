@@ -37,7 +37,7 @@ jobs:
           NAUKRI_USERNAME: ${{secrets.NAUKRI_USERNAME}}
           NAUKRI_PASSWORD: ${{secrets.NAUKRI_PASSWORD}}
         run: |
-          mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/updateProfile.xml
+          mvn clean test -DsuiteXmlFiles=src/test/resources/testSuites/updateProfile.xml
 
       - name: List generated files (diagnostic)
         if: always()
