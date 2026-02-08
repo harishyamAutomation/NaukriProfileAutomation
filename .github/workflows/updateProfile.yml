@@ -23,13 +23,7 @@ jobs:
           java-version: '15'
           cache: maven
 
-      - name: Cache local Maven repository
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+      # ... local Maven cache handled by setup-java (cache: maven)
 
       - name: Run TestNG suite (updateProfile.xml)
         working-directory: ${{ github.workspace }}
@@ -37,7 +31,7 @@ jobs:
           NAUKRI_USERNAME: ${{secrets.NAUKRI_USERNAME}}
           NAUKRI_PASSWORD: ${{secrets.NAUKRI_PASSWORD}}
         run: |
-          mvn clean test -DsuiteXmlFiles=src/test/resources/testSuites/updateProfile.xml
+          mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/updateProfile.xml
 
       - name: List generated files (diagnostic)
         if: always()
@@ -49,5 +43,9 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: surefire-reports
-          path: Naukri_Profile.html
+          name: surefire-reports-and-reports
+          path: |
+            target/surefire-reports/**
+            target/test-classes/**
+            reports/**
+            Naukri_Profile.html
